@@ -386,6 +386,17 @@ class AutoX():
         log("feature importance")
         log(fimp)
 
+        # 模型回溯
+        train_lgb = model_lgb.predict(train, used_features)
+        train_xgb = model_xgb.predict(train, used_features)
+        # predict_tabnet = model_tabnet.predict(test[used_features])
+        train_predict = (train_xgb + train_lgb) / 2
+
+        # 获得回溯结果
+        sub_train = train[id_ + [self.info_['time_col']]]
+        sub_train[target] = train_predict
+        sub_train.index = range(len(sub_train))
+
         # 模型预测
         predict_lgb = model_lgb.predict(test, used_features)
         predict_xgb = model_xgb.predict(test, used_features)
@@ -402,7 +413,4 @@ class AutoX():
         sub[target] = predict
         sub.index = range(len(sub))
 
-        return sub
-    
-    def haha(self):
-        print("成功！")
+        return sub, sub_train
