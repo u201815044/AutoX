@@ -403,3 +403,6 @@ class AutoX():
         sub.index = range(len(sub))
 
         return sub
+    
+    def haha(self):
+      print("成功！")
