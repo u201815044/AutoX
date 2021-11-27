@@ -378,8 +378,8 @@ class AutoX():
             model_lgb = LgbRegressionTs()
             model_lgb.fit(train, test, used_features, target, self.info_['time_col'], self.info_['ts_unit'])
 
-            model_xgb = XgbRegressionTs()
-            model_xgb.fit(train, test, used_features, target, self.info_['time_col'], self.info_['ts_unit'])
+            #model_xgb = XgbRegressionTs()
+            #model_xgb.fit(train, test, used_features, target, self.info_['time_col'], self.info_['ts_unit'])
 
         # 特征重要性
         fimp = model_lgb.feature_importances_
@@ -388,10 +388,11 @@ class AutoX():
 
         # 模型回溯
         train_lgb = model_lgb.predict(train, used_features)
-        train_xgb = model_xgb.predict(train, used_features)
+        # train_xgb = model_xgb.predict(train, used_features)
         # predict_tabnet = model_tabnet.predict(test[used_features])
-        train_predict = (train_xgb + train_lgb) / 2
-
+        #train_predict = (train_xgb + train_lgb) / 2
+        train_predict = train_lgb
+        
         # 获得回溯结果
         sub_train = train[id_ + [self.info_['time_col']]]
         sub_train[target] = train_predict
@@ -399,10 +400,11 @@ class AutoX():
 
         # 模型预测
         predict_lgb = model_lgb.predict(test, used_features)
-        predict_xgb = model_xgb.predict(test, used_features)
+        # predict_xgb = model_xgb.predict(test, used_features)
         # predict_tabnet = model_tabnet.predict(test[used_features])
-        predict = (predict_xgb + predict_lgb) / 2
-
+        #predict = (predict_xgb + predict_lgb) / 2
+        predict = predict_lgb
+        
         # 预测结果后处理
         min_ = self.info_['min_target']
         max_ = self.info_['max_target']
